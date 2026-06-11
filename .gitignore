@@ -6,3 +6,7 @@ Thumbs.db
 *.log
 dist/
 .vercel/
+.claude/
+generate_qr.py
+generate_qr.swift
+backend/flui.db
