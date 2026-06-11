@@ -59,21 +59,28 @@ async function login(provider = 'Email', emailVal = '', passwordVal = '') {
   try {
     let user, token;
 
-    if (provider === 'Email') {
-      const data = await apiFetch('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email: emailVal, password: passwordVal }),
-      });
-      token = data.token;
-      user  = data.user;
-    } else {
-      /* Provedores sociais / biométrico: usa usuário demo */
-      const data = await apiFetch('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email: 'carlos@flui.com', password: '123456' }),
-      });
-      token = data.token;
-      user  = data.user;
+    try {
+      if (provider === 'Email') {
+        const data = await apiFetch('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email: emailVal, password: passwordVal }),
+        });
+        token = data.token;
+        user  = data.user;
+      } else {
+        const data = await apiFetch('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email: 'carlos@flui.com', password: '123456' }),
+        });
+        token = data.token;
+        user  = data.user;
+      }
+    } catch {
+      /* Backend indisponível — modo demo com dados locais */
+      token = 'demo-token';
+      user  = (typeof fluiUser !== 'undefined')
+        ? fluiUser
+        : { name: 'Carlos Mendes', email: 'carlos@flui.com', car: 'Tesla Model 3' };
     }
 
     setToken(token);
